@@ -18,3 +18,9 @@ AF_hs_df.to_csv('AF_helix_sheet.tsv', sep="\t", index=False)
 virus_df = pd.read_csv('virus_helix_sheet.tsv', sep='\t', header=0)
 nonVirus_hs_df = hs_df[~hs_df['Entry'].isin(virus_df['Entry'])]
 nonVirus_hs_df.to_csv('nonVirus_helix_sheet.tsv', sep="\t", index=False)
+
+# generate the rest nonAF proteins in .tsv file
+nonAF_df = hs_df[hs_df['Entry'].isin(nonAFprot)]
+nonAF_nonVirus_df = nonAF_df[~nonAF_df['Entry'].isin(virus_df['Entry'])]
+print(nonAF_nonVirus_df)
+nonAF_nonVirus_df.to_csv('nonAF_nonVirus_helix_sheet.tsv', sep="\t", index=False)
