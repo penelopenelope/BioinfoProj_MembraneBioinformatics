@@ -10,6 +10,6 @@
 ### 2022-Sep-12 Meeting 3 TO DO LIST 
 - [x] Generate the averaged 20-amino acid distance matrix
 - [ ] Embed the averaged 20-amino acid distance matrix into SVM
-- [ ] Generate the accumulated contact aa matrix.
+- [x] Generate the accumulated contact aa matrix.
 - [ ] Embed the accumulated contact aa matrix into SVM
 - [ ] Other feature engineering from literature reviews - DL-based feature pre-processing etc.

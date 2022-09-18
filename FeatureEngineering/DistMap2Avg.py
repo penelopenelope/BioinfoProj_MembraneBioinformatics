@@ -54,7 +54,8 @@ def check_folder_exists(folder_name):
 if __name__ == "__main__":
   
     # read distance maps in folder
-    dist_maps_dir = 'TestDistMaps/'
+    #dist_maps_dir = 'TestDistMaps/'
+    dist_maps_dir = '../Datasets/CA_dist_maps/'
     directory = os.fsdecode(dist_maps_dir)
     #print(directory)
 
