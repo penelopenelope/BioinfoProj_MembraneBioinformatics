@@ -33,7 +33,7 @@ entry_label_pd['SUM_CMap'] = ""
 
 for sum_cmap_file in os.listdir(sum_cmap_dir):
     sum_cmap = pd.read_csv(sum_cmap_dir + sum_cmap_file, delim_whitespace=True, header=None)
-    #print(temp)
+    #print(sum_cmap)
     entry_name = sum_cmap_file[:-9]
     entry_label_pd.loc[entry_name]['SUM_CMap'] = sum_cmap.values.flatten()
 
