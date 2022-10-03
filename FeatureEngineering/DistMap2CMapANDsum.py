@@ -29,6 +29,7 @@ def CMap2SumCMap(sequence, contact_map):
         sum_contact_aa_mat.at[row['C1'], row['C2']] = sum_contact_aa_mat.at[row['C1'], row['C2']] + row['Contact']
     sum_contact_aa_mat = sum_contact_aa_mat.to_numpy()
     sum_contact_aa_mat = np.triu(sum_contact_aa_mat) + np.tril(sum_contact_aa_mat, -1).transpose()
+    sum_contact_aa_mat = np.maximum(sum_contact_aa_mat, sum_contact_aa_mat.transpose())
     sum_contact_aa_mat = pd.DataFrame(sum_contact_aa_mat, columns=aa20, index=aa20)
 
     return sum_contact_aa_mat
@@ -41,7 +42,7 @@ def check_folder_exists(folder_name):
 if __name__ == "__main__":
   
     # read distance maps in folder
-    #dist_maps_dir = 'TestDistMaps/'
+    #dist_maps_dir = '../Datasets/TestDistMaps/'
     dist_maps_dir = '../Datasets/CA_dist_maps/'
     directory = os.fsdecode(dist_maps_dir)
     #print(directory)
@@ -55,16 +56,18 @@ if __name__ == "__main__":
     #print(entry_seq_pd)
 
     # TODO - decide the exact contact threshold after finding the best performance
-    distance_threshold = 10
+    distance_threshold = 25
 
     # create folder to save the contact maps 
     contact_map_folder_name = 'contact_maps_thresh_' + str(distance_threshold) + '/'
     check_folder_exists(contact_map_folder_name)
 
     # create folder to save the sum contact aa maps 
-    sum_contact_aa_folder_name = 'SUM_contact_aa_maps/'
+    sum_contact_aa_folder_name = 'SUM_contact_aa_maps_' + str(distance_threshold) + '/'
     check_folder_exists(sum_contact_aa_folder_name)
 
+    notMatch = []
+    
     for dist_map_filename in os.listdir(directory):
 
         # read sequence by entry names info from AF_helix_sheet.tsv 
@@ -79,6 +82,14 @@ if __name__ == "__main__":
         #print(os.path.abspath(d_map_dir))        
         dist_map = pd.read_csv(d_map_dir, delim_whitespace=True, header=None)
         dist_map_pd = pd.DataFrame(dist_map)
+
+        # check if the length of seq_info is the same as in the pdb file
+        print(len(seq_info), len(dist_map_pd))
+        if len(seq_info) != len(dist_map_pd):
+            notMatch.append(entry_name)
+            print(notMatch)
+            continue
+
         dist_map_pd.columns = list(seq_info)
         dist_map_pd.index = list(seq_info)
 
@@ -99,4 +110,5 @@ if __name__ == "__main__":
         # save the sum contact aa map to *.txt file
         np.savetxt(sum_contact_aa_folder_name + entry_name + '_SUM_CMap', sum_CMap, fmt='%d')
 
+    np.savetxt('notMatch', notMatch, fmt="%s")
 

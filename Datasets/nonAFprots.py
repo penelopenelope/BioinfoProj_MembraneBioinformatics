@@ -41,4 +41,4 @@ print(short_prot_hs) # 0
 
 # POSSIBLE SOLUTION - https://alphafold.ebi.ac.uk/faq
     # Prediction via AlphaFold source code
-    # sing the EBI Protein Similarity Search tool 
+    # using the EBI Protein Similarity Search tool 
