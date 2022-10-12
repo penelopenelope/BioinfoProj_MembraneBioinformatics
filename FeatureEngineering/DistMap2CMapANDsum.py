@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 import os   
+import argparse
 from joblib import Parallel, delayed
 
 def Dist2CMap(dist_map, cmap_thresh):
@@ -82,13 +83,16 @@ def check_folder_exists(folder_name):
     os.makedirs(folder_name)
 
 if __name__ == "__main__":
-  
+
+    parser = argparse.ArgumentParser(description='input threshold for cmap generation.')
+    parser.add_argument('cmap_threshold', help='an integer for the cmap generation', type=int)
+    args = parser.parse_args()
 
     # Parameters - 
 
     # read distance maps in folder
-    dist_maps_dir = '../Datasets/TestDistMaps/'
-    #dist_maps_dir = '../Datasets/CA_dist_maps/'
+    #dist_maps_dir = '../Datasets/TestDistMaps/'
+    dist_maps_dir = '../Datasets/CA_dist_maps/'
     directory = os.fsdecode(dist_maps_dir)
     #print(directory)
 
@@ -103,7 +107,7 @@ if __name__ == "__main__":
     aa20 =['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V']
 
     # TODO - decide the exact contact threshold after finding the best performance
-    distance_threshold = 20
+    distance_threshold = args.cmap_threshold
 
     # create folder to save the contact maps 
     contact_map_folder_name = 'contact_maps_thresh_' + str(distance_threshold) + '/'
