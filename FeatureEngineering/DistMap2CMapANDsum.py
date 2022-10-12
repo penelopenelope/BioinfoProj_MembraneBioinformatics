@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 import os   
+from joblib import Parallel, delayed
 
 def Dist2CMap(dist_map, cmap_thresh):
 
@@ -11,28 +12,69 @@ def Dist2CMap(dist_map, cmap_thresh):
     
     return cmap
 
-def CMap2SumCMap(sequence, contact_map):
+def CMap2SumCMap(func, df_contact, null_value=0):
 
-    # create a zero-filled sum of contact aa matrix - https://www.cup.uni-muenchen.de/ch/compchem/tink/as.html 
-    aa20 =['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V']
-    sum_contact_aa_mat = pd.DataFrame(0, columns=aa20, index=aa20)
+# creates a subset for every combination of amino acid types, then applies func to all numbers in the subset
+# the result of func has to be a single number
+    records = []
+    for aa1 in aa20:
+        for aa2 in aa20:
+            if aa1 not in df_contact.columns or aa2 not in df_contact.columns:
+                records.append([aa1, aa2, null_value])
+                continue
+            contacts = df_contact.loc[aa1, aa2]
+            print(aa1, aa2)
+            print(contacts)
+            # contacts can be an int, a series or a dataframe
+            if isinstance(contacts, (int, np.integer)):
+                records.append([aa1, aa2, (contacts < distance_threshold) * 1])
+                #print('int!!!!!!!!!!!!!')
+            else:  # series or a dataframe
+                np_array = contacts.to_numpy()
+                print(np_array)
+                if isinstance(contacts, pd.DataFrame):
+                    if aa1 == aa2: 
+                        temp_mat = np.full((np_array.shape), 10000)
+                        np_array = np.triu(np_array) + np.tril(temp_mat, -1)
+                    np_array = np_array.flatten()
+                    #print('DataFrame')
 
-    # iterate the contact map to fill in the sum of contact aa matrix - 
+                # check if array is really 1d
+                assert len(np.shape(np_array)) == 1
+
+                np_array_transformed = func(np_array)
+                print('np_array_transformed - ', np_array_transformed)
+                records.append([aa1, aa2, np_array_transformed])
+
+    df_result_long = pd.DataFrame.from_records(records, columns=["aa1", "aa2", "value"])
+    df_result = df_result_long.pivot(index="aa1", columns="aa2", values="value")
+    return df_result
+
+def create_features(entry_name, dist_map_pd, seq_info, distance_threshold, contact_map_folder_name, sum_contact_aa_folder_name):
+
+    print('entry name - ', entry_name)
+    dist_map_pd.columns = list(seq_info)
+    dist_map_pd.index = list(seq_info)
+    print('seq information - ', seq_info)
+
+    # generate CMap from distance maps
+    contact_map = Dist2CMap(dist_map_pd, distance_threshold)
     contact_map_pd = pd.DataFrame(contact_map)
-    contact_map_pd.columns = list(sequence)
-    contact_map_pd.index = list(sequence)
-    up_triangle_contact_map_pd = contact_map_pd.where(np.triu(np.ones(contact_map_pd.shape)).astype(bool))
-    contact_map_dict = up_triangle_contact_map_pd.stack().reset_index()
-    contact_map_dict.columns = ['C1','C2','Contact']
-    for index, row in contact_map_dict.iterrows(): # including the contact info of the atom to itself
-        #print(row['C1'], row['C2'], row['Contact'])
-        sum_contact_aa_mat.at[row['C1'], row['C2']] = sum_contact_aa_mat.at[row['C1'], row['C2']] + row['Contact']
-    sum_contact_aa_mat = sum_contact_aa_mat.to_numpy()
-    sum_contact_aa_mat = np.triu(sum_contact_aa_mat) + np.tril(sum_contact_aa_mat, -1).transpose()
-    sum_contact_aa_mat = np.maximum(sum_contact_aa_mat, sum_contact_aa_mat.transpose())
-    sum_contact_aa_mat = pd.DataFrame(sum_contact_aa_mat, columns=aa20, index=aa20)
+    contact_map_pd.columns = list(seq_info)
+    contact_map_pd.index = list(seq_info)
+    #print(contact_map_pd)
 
-    return sum_contact_aa_mat
+    # save the contact map
+    np.savetxt(contact_map_folder_name + entry_name + '_CMap', contact_map, fmt='%d')
+    
+    # generate sum of contact aa map from the CMap
+    sum_CMap = CMap2SumCMap(lambda a: ((a < distance_threshold) * 1).sum(), dist_map_pd)
+    print(sum_CMap)
+    
+    # save the sum contact aa map to *.txt file
+    np.savetxt(sum_contact_aa_folder_name + entry_name + '_SUM_CMap', sum_CMap, fmt='%d')
+
+    return True
 
 #Check if folder exists, if not create folder
 def check_folder_exists(folder_name):
@@ -41,9 +83,12 @@ def check_folder_exists(folder_name):
 
 if __name__ == "__main__":
   
+
+    # Parameters - 
+
     # read distance maps in folder
-    #dist_maps_dir = '../Datasets/TestDistMaps/'
-    dist_maps_dir = '../Datasets/CA_dist_maps/'
+    dist_maps_dir = '../Datasets/TestDistMaps/'
+    #dist_maps_dir = '../Datasets/CA_dist_maps/'
     directory = os.fsdecode(dist_maps_dir)
     #print(directory)
 
@@ -55,8 +100,10 @@ if __name__ == "__main__":
     entry_seq_pd = entry_seq_pd.set_index('Entry')
     #print(entry_seq_pd)
 
+    aa20 =['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V']
+
     # TODO - decide the exact contact threshold after finding the best performance
-    distance_threshold = 25
+    distance_threshold = 20
 
     # create folder to save the contact maps 
     contact_map_folder_name = 'contact_maps_thresh_' + str(distance_threshold) + '/'
@@ -68,6 +115,9 @@ if __name__ == "__main__":
 
     notMatch = []
     
+    # create list of "create_features" parameter values for the individual threads
+    # important: no two elements of worker_inputs can be the identical, otherwise unexpected behaviour
+    worker_inputs = []
     for dist_map_filename in os.listdir(directory):
 
         # read sequence by entry names info from AF_helix_sheet.tsv 
@@ -87,28 +137,25 @@ if __name__ == "__main__":
         print(len(seq_info), len(dist_map_pd))
         if len(seq_info) != len(dist_map_pd):
             notMatch.append(entry_name)
-            print(notMatch)
+            print('Not match between hlix_sheet file and pdb file - ', notMatch)
             continue
 
-        dist_map_pd.columns = list(seq_info)
-        dist_map_pd.index = list(seq_info)
+        worker_inputs.append(
+            [
+                entry_name,
+                dist_map_pd,
+                seq_info,
+                distance_threshold,
+                contact_map_folder_name,
+                sum_contact_aa_folder_name,
+            ]
+        )
 
-        # generate CMap from distance maps
-        contact_map = Dist2CMap(dist_map_pd, distance_threshold)
-        contact_map_pd = pd.DataFrame(contact_map)
-        contact_map_pd.columns = list(seq_info)
-        contact_map_pd.index = list(seq_info)
-        print(contact_map_pd)
 
-        # save the contact map
-        np.savetxt(contact_map_folder_name + entry_name + '_CMap', contact_map, fmt='%d')
-        
-        # generate sum of contact aa map from the CMap
-        sum_CMap = CMap2SumCMap(seq_info, contact_map)
-        print(sum_CMap)
-        
-        # save the sum contact aa map to *.txt file
-        np.savetxt(sum_contact_aa_folder_name + entry_name + '_SUM_CMap', sum_CMap, fmt='%d')
+    # https://joblib.readthedocs.io/en/latest/parallel.html#parallel
+    r = Parallel(n_jobs=-1)(
+        delayed(create_features)(*worker_input) for worker_input in worker_inputs
+    )
 
     np.savetxt('notMatch', notMatch, fmt="%s")
 

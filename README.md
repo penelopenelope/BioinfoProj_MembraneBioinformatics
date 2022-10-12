@@ -11,7 +11,7 @@
 
 ### 2022-Sep-01 Meeting 3 TO DO LIST
 - [x] Dataset cleansing for viral sequences 
-- [ ] Still 282 nonAF üroteins - generate the PDB files by prediction tools if low accuracy later
+- [ ] Still 282 nonAF proteins - generate the PDB files by prediction tools if low accuracy later
 
 ### 2022-Sep-12 Meeting 4 TO DO LIST 
 - [x] Generate the averaged 20-amino acid distance matrix
@@ -19,3 +19,9 @@
 - [x] Generate the accumulated contact aa matrix.
 - [x] Embed the accumulated contact aa matrix into SVM
 - [ ] Other feature engineering from literature reviews - DL-based feature pre-processing etc.
+
+### 2022-Oct-5 Meeting 5 TO DO LIST
+- [ ] Update Cmap generation codes according to Andreas' script
+- [ ] Generate all the required datasets on the server
+- [ ] Prediction results of SVM
+- [ ] CNN trial
