@@ -22,6 +22,6 @@
 
 ### 2022-Oct-5 Meeting 5 TO DO LIST
 - [x] Update Cmap generation codes according to Andreas' script
-- [ ] Generate all the required datasets on the server
+- [x] Generate all the required datasets on the server
 - [ ] Prediction results of SVM
 - [ ] CNN trial
