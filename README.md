@@ -25,3 +25,6 @@
 - [x] Generate all the required datasets on the server - cmap thresholds 10, 15, 20, 25, 30
 - [x] Prediction results of SVM - prediction results, best-performance parameters, trained models 
 - [ ] CNN trial - VGG19
+  - [ ] seperate cmaps into train and test folders, alpha and beta folders
+  - [ ] VGG19 model generation
+  - [ ] cross validation for model performance
