@@ -23,5 +23,5 @@
 ### 2022-Oct-5 Meeting 5 TO DO LIST
 - [x] Update Cmap generation codes according to Andreas' script
 - [x] Generate all the required datasets on the server - cmap thresholds 10, 15, 20, 25, 30
-- [ ] Prediction results of SVM
-- [ ] CNN trial
+- [x] Prediction results of SVM - prediction results, best-performance parameters, trained models 
+- [ ] CNN trial - VGG19
