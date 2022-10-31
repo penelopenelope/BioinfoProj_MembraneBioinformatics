@@ -31,14 +31,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # classes and training set
-    classes = os.listdir('./train/')
-    alpha_helix_files = os.listdir('./train/alpha_helix/')
-    beta_strand_files = os.listdir('./train/beta_strand/')
+    classes = os.listdir('./train' + str(args.cmap_threshold) + '/')
+    alpha_helix_files = os.listdir('./train' + str(args.cmap_threshold) + '/alpha_helix/')
+    beta_strand_files = os.listdir('./train' + str(args.cmap_threshold) + '/beta_strand/')
 
     # transform training cmaps to tensors 
     train_dataset = []
     for ah_mat in alpha_helix_files:
-        ah_cmap_mat = pd.read_csv('./train/alpha_helix/' + ah_mat, delim_whitespace=True, header=None)
+        ah_cmap_mat = pd.read_csv('./train' + str(args.cmap_threshold) + '/alpha_helix/' + ah_mat, delim_whitespace=True, header=None)
         ah_cmap_pd = pd.DataFrame(ah_cmap_mat)
         ah_cmap_array = ah_cmap_pd.to_numpy()
         ah_cmap = torch.tensor(ah_cmap_array)
@@ -49,7 +49,7 @@ if __name__ == "__main__":
         ah_cmap_w_label = (ah_output_3c, 0)
         train_dataset.append(ah_cmap_w_label)
     for bs_mat in beta_strand_files:
-        bs_cmap_mat = pd.read_csv('./train/beta_strand/' + bs_mat, delim_whitespace=True, header=None)
+        bs_cmap_mat = pd.read_csv('./train' + str(args.cmap_threshold) + '/beta_strand/' + bs_mat, delim_whitespace=True, header=None)
         bs_cmap_pd = pd.DataFrame(bs_cmap_mat)
         bs_cmap_array = bs_cmap_pd.to_numpy()
         bs_cmap = torch.tensor(bs_cmap_array)
@@ -331,11 +331,11 @@ if __name__ == "__main__":
 
     
     # transform test cmaps to tensors 
-    test_alpha_helix_files = os.listdir('./test/alpha_helix/')
-    test_beta_strand_files = os.listdir('./test/beta_strand/')
+    test_alpha_helix_files = os.listdir('./test' + str(args.cmap_threshold) + '/alpha_helix/')
+    test_beta_strand_files = os.listdir('./test' + str(args.cmap_threshold) + '/beta_strand/')
     test_dataset = []
     for test_ah_mat in test_alpha_helix_files:
-        test_ah_cmap_mat = pd.read_csv('./test/alpha_helix/' + test_ah_mat, delim_whitespace=True, header=None)
+        test_ah_cmap_mat = pd.read_csv('./test' + str(args.cmap_threshold) + '/alpha_helix/' + test_ah_mat, delim_whitespace=True, header=None)
         test_ah_cmap_pd = pd.DataFrame(test_ah_cmap_mat)
         test_ah_cmap_array = test_ah_cmap_pd.to_numpy()
         test_ah_cmap = torch.tensor(test_ah_cmap_array)
@@ -346,7 +346,7 @@ if __name__ == "__main__":
         test_ah_cmap_w_label = (test_ah_output_3c, 0)
         test_dataset.append(test_ah_cmap_w_label)
     for test_bs_mat in test_beta_strand_files:
-        test_bs_cmap_mat = pd.read_csv('./test/beta_strand/' + test_bs_mat, delim_whitespace=True, header=None)
+        test_bs_cmap_mat = pd.read_csv('./test' + str(args.cmap_threshold) + '/beta_strand/' + test_bs_mat, delim_whitespace=True, header=None)
         test_bs_cmap_pd = pd.DataFrame(test_bs_cmap_mat)
         test_bs_cmap_array = test_bs_cmap_pd.to_numpy()
         test_bs_cmap = torch.tensor(test_bs_cmap_array)
