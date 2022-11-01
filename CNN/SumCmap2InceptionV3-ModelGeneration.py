@@ -316,6 +316,8 @@ if __name__ == "__main__":
     ax2.set_xlabel('Epoch')
     ax2.set_title('Loss')
     l2 = ax2.legend(loc="best")
+    plt.savefig('training_process.png')
+
 
     # predicting on test set
     @torch.no_grad()
@@ -371,6 +373,7 @@ if __name__ == "__main__":
     plt.xlabel('Predicted Label',fontsize=18)
     plt.ylabel('True Label',fontsize=18)
     plt.show()
+    plt.savefig('confusion_matrix.png')
 
     # compute performance metrics
     tn, fp, fn, tp = cm.ravel()
