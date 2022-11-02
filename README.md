@@ -26,6 +26,5 @@
 - [x] Prediction results of SVM - prediction results, best-performance parameters, trained models 
 - [ ] CNN trial - VGG19
   - [x] seperate cmaps into train and test folders, alpha and beta folders
-  - [ ] Inception V3 model generation and prefiction
-  - [ ] VGG19 model generation and prediction
-  - [ ] CNN model generation and prediction
+  - [ ] Inception V3 model generation and prediction
+  - [ ] Simple CNN model generation and prediction
