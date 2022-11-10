@@ -24,7 +24,22 @@
 - [x] Update Cmap generation codes according to Andreas' script
 - [x] Generate all the required datasets on the server - cmap thresholds 10, 15, 20, 25, 30
 - [x] Prediction results of SVM - prediction results, best-performance parameters, trained models 
-- [ ] CNN trial - VGG19
+- [ ] CNN trial - InceptionV3
   - [x] seperate cmaps into train and test folders, alpha and beta folders
-  - [ ] Inception V3 model generation and prediction
-  - [ ] Simple CNN model generation and prediction
+  - [ ] Inception V3 ~~model generation and~~ prediction
+  - [ ] Simple CNN ~~model generation and~~ prediction
+    - [x] only 2 FC layers
+    - [x] Conv layers + FC layers 
+
+### 2022-Nov-02 Meeting 6 TO DO LIST
+- [ ]  Group seminar slides 
+  - [ ]  done
+  - [ ]  plan
+    - [ ]  GNN
+    - [ ]  Representation Learning
+    - [ ]  text classification and no-pretrained model
+- [ ]  Compare SVM and CNN model performances 
+- [x]  lower cmap threshold for SVM - 5
+- [ ]  other features by Representation Learning
+- [ ]  GPU test
+- [ ]  new dataset for transporter substrate

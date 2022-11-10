@@ -293,7 +293,7 @@ if __name__ == "__main__":
         'state_dict': model.state_dict(),
         'optimizer' : optimizer.state_dict()
     }
-    torch.save(bestmodel, 'InceptionV3.pth')
+    torch.save(bestmodel, 'InceptionV3-' + str(args.cmap_threshold) + '.pth')
 
     # plot acc and loss
     f, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
@@ -316,7 +316,7 @@ if __name__ == "__main__":
     ax2.set_xlabel('Epoch')
     ax2.set_title('Loss')
     l2 = ax2.legend(loc="best")
-    plt.savefig('training_process.png')
+    plt.savefig('InceptionV3-' + str(args.cmap_threshold) + '-training_process.png')
 
 
     # predicting on test set
@@ -372,8 +372,7 @@ if __name__ == "__main__":
     plt.yticks(range(2), ['alpha_helix', 'beta_strand'], fontsize=16)
     plt.xlabel('Predicted Label',fontsize=18)
     plt.ylabel('True Label',fontsize=18)
-    plt.show()
-    plt.savefig('confusion_matrix.png')
+    plt.savefig('InceptionV3-' + str(args.cmap_threshold) + '-confusion_matrix.png')
 
     # compute performance metrics
     tn, fp, fn, tp = cm.ravel()
