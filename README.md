@@ -32,14 +32,16 @@
     - [x] 2* Conv layers + 2* FC layers 
 
 ### 2022-Nov-02 Meeting 6 TO DO LIST
-- [ ]  Group seminar slides 
-  - [ ]  done
-  - [ ]  plan
+- [x]  Group seminar slides 
+  - [x]  done
+  - [x]  plan
     - [ ]  GNN
-    - [ ]  Representation Learning
+    - [ ]  Representation Learning - feature can be extracted by GNN
     - [ ]  text classification and no-pretrained model
 - [ ]  Compare SVM and CNN model performances 
 - [x]  lower cmap threshold for SVM - 5
-- [ ]  other features by Representation Learning
+- [x]  other features by Representation Learning
 - [ ]  GPU test
 - [ ]  new dataset for transporter substrate
+- [ ]  dataset imbalance!!!
+- [ ]  multimodal encoder-decoder
