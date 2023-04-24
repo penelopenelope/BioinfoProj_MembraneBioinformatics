@@ -48,21 +48,21 @@
 
 
 ### 2023-Mar-17 Meeting 7 TO DO LIST
-- [] New dataset - Transmembrane transporters VS other membrane proteins
-  - [] positive - 
-    - [] Transmembrane AND Transport AND transmembrane transport (GO), NOT virus - 11215126 results
-    - [] Transmembrane (kw) AND Transport (kw) AND transmembrane transport (GO), NOT virus - 8281273 results
-  - [] negative - 
-    - [] membrane, NOT transport, NOT transmembrane transport (GO), NOT virus - 35404263 results
-    - [] membrane, NOT transport, NOT transmembrane transport (GO), AND signal, NOT virus - 5939064 results
-    - [] membrane (kw), NOT transport (kw), NOT transmembrane transport (GO), NOT virus - 32833742 results
-    - [] membrane (kw), NOT transport (kw), NOT transmembrane transport (GO), AND signal (kw), NOT virus - 204347 results
-    - [] Questions - intracellular protein transport? (Q07418)
-- [] Old dataset - Alpha-helix VS Beta-sheet
-  - [] oversampling on minor class - imbalanced-learn package
-    - [] GNN
-    - [] AutoEncoder
-- [] Representation Learning on new dataset
-  - [] GNN
-  - [] AutoEncoder
-  - [] Causal Representation Learning
+- [ ] New dataset - Transmembrane transporters VS other membrane proteins
+  - [ ] positive - 
+    - [ ] Transmembrane AND Transport AND transmembrane transport (GO), NOT virus - 11215126 results
+    - [ ] Transmembrane (kw) AND Transport (kw) AND transmembrane transport (GO), NOT virus - 8281273 results
+  - [ ] negative - 
+    - [ ] membrane, NOT transport, NOT transmembrane transport (GO), NOT virus - 35404263 results
+    - [ ] membrane, NOT transport, NOT transmembrane transport (GO), AND signal, NOT virus - 5939064 results
+    - [ ] membrane (kw), NOT transport (kw), NOT transmembrane transport (GO), NOT virus - 32833742 results
+    - [ ] membrane (kw), NOT transport (kw), NOT transmembrane transport (GO), AND signal (kw), NOT virus - 204347 results
+    - [ ] Questions - intracellular protein transport? (Q07418)
+- [ ] Old dataset - Alpha-helix VS Beta-sheet
+  - [ ] oversampling on minor class - imbalanced-learn package
+    - [ ] GNN
+    - [ ] AutoEncoder
+- [ ] Representation Learning on new dataset
+  - [ ] GNN
+  - [ ] AutoEncoder
+  - [ ] Causal Representation Learning
